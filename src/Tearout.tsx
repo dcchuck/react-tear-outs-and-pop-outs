@@ -14,10 +14,12 @@ export default class Tearout extends React.Component<{}, ITearoutState> {
     private minDragDistance: number;
     private childTearoutname: string;
     private childWin: any;
+    private onOpenFin: boolean;
 
     constructor(props: {}) {
         super(props);
         this.minDragDistance = 500;
+        this.onOpenFin = (typeof fin !== 'undefined');
         this.state = {
             dragged: false,
             standalone: false,
@@ -30,20 +32,25 @@ export default class Tearout extends React.Component<{}, ITearoutState> {
         this.setDragStartLocation = this.setDragStartLocation.bind(this);
         this.endDrag = this.endDrag.bind(this);
         this.childTearoutname = 'child-tearout';
-
-        const childWin = new fin.desktop.Window({
-            autoShow: false,
-            name: this.childTearoutname,
-            url: '/tearout'
-        }, () => {
-            childWin.addEventListener('closed', () => {
-                this.setState({ dragged: false });
-            })
-            this.childWin = childWin;
-        });
+        if (this.onOpenFin) {
+            const childWin = new fin.desktop.Window({
+                autoShow: false,
+                name: this.childTearoutname,
+                url: '/tearout'
+            }, () => {
+                childWin.addEventListener('closed', () => {
+                    this.setState({ dragged: false });
+                })
+                this.childWin = childWin;
+            });
+        }
     }
 
     public render() {
+        // tslint:disable-next-line:no-console
+        console.log(this)
+        // tslint:disable-next-line:no-console
+        console.log(this.onOpenFin);
         if (this.state.dragged) {
             return null
         } else {
@@ -55,17 +62,17 @@ export default class Tearout extends React.Component<{}, ITearoutState> {
                         onDragStart={this.setDragStartLocation}
                         onDragEnd={this.endDrag}
                     />
-                    {this.state.dragged ? 'Last Drag Good!' : 'Drag me!'}
+                    {this.onOpenFin ? (this.state.standalone ? 'Close Me To Restore' : 'Drag Me!') : 'Launch Me On OpenFin!'}
                 </div>
             )
         }
     }
 
     public componentDidMount() {
-        if (typeof fin !== 'undefined') {
+        if (this.onOpenFin) {
             const mainAppWindowName = fin.desktop.Application.getCurrent().getWindow().name;
             const thisWindowName = fin.desktop.Window.getCurrent().name;
-            this.setState({ standalone: (mainAppWindowName === thisWindowName) });
+            this.setState({ standalone: !(mainAppWindowName === thisWindowName) });
         }
     }
 
@@ -74,16 +81,18 @@ export default class Tearout extends React.Component<{}, ITearoutState> {
             this.childWin.showAt(this.state.xEnd, this.state.yEnd);
         }
 
-        const childWin = new fin.desktop.Window({
-            autoShow: false,
-            name: this.childTearoutname,
-            url: '/tearout'
-        }, () => {
-            childWin.addEventListener('closed', () => {
-                this.setState({ dragged: false });
-            })
-            this.childWin = childWin;
-        });
+        if (this.onOpenFin) {
+            const childWin = new fin.desktop.Window({
+                autoShow: false,
+                name: this.childTearoutname,
+                url: '/tearout'
+            }, () => {
+                childWin.addEventListener('closed', () => {
+                    this.setState({ dragged: false });
+                })
+                this.childWin = childWin;
+            });
+        }
     }
 
     private setDragStartLocation(e: any) {
