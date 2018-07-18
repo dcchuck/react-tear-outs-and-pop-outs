@@ -1,15 +1,7 @@
 import * as React from 'react';
 import { Route } from 'react-router-dom';
 import './App.css';
-
-function Tearout() {
-    return (
-        <div className="elements" >
-            <div className="draggable-region" draggable={true} />
-            111
-        </div>
-    )
-}
+import Tearout from './Tearout';
 
 function ContainedTearout() {
     return (
