@@ -3,10 +3,20 @@ import { Route } from 'react-router-dom';
 import './App.css';
 import Tearout from './Tearout';
 
+function TearoutChild() {
+    return (
+        <p>
+            Tearout child elements via this.props.children
+        </p>
+    )
+}
+
 function ContainedTearout() {
     return (
         <div className="flex-container">
-            <Tearout />
+            <Tearout>
+                <TearoutChild />
+            </Tearout>
         </div>
     )
 }
@@ -14,7 +24,7 @@ function ContainedTearout() {
 function Home() {
     return (
         <div className="flex-container">
-            <Tearout />
+            <Tearout minDragDistance={200} />
             <div className="elements">2</div>
             <div className="elements">3</div>
         </div>

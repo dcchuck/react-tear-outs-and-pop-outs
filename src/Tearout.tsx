@@ -6,21 +6,25 @@ interface ITearoutState {
     yStart: number;
     xEnd: number;
     yEnd: number;
-    dragged: boolean;
+    draggedOut: boolean;
     standalone: boolean;
 }
 
-export default class Tearout extends React.Component<{}, ITearoutState> {
+interface ITearoutProps {
+    minDragDistance?: number;
+}
+
+export default class Tearout extends React.Component<ITearoutProps, ITearoutState> {
     private minDragDistance: number;
     private childWin: any;
     private onOpenFin: boolean;
 
-    constructor(props: {}) {
+    constructor(props: ITearoutProps) {
         super(props);
-        this.minDragDistance = 200;
+        this.minDragDistance = this.props.minDragDistance || 200;
         this.onOpenFin = (typeof fin !== 'undefined');
         this.state = {
-            dragged: false,
+            draggedOut: false,
             standalone: false,
             xEnd: 0,
             xStart: 0,
@@ -37,17 +41,22 @@ export default class Tearout extends React.Component<{}, ITearoutState> {
     }
 
     public render() {
-        if (this.state.dragged) {
+        if (this.state.draggedOut) {
             return null
         } else {
             return (
                 <div className="elements" >
-                    <div
-                        className="draggable-region"
-                        draggable={true}
-                        onDragStart={this.setDragStartLocation}
-                        onDragEnd={this.endDrag}
-                    />
+                    {this.state.standalone ?
+                        null
+                        :
+                        <div
+                            className="draggable-region"
+                            draggable={true}
+                            onDragStart={this.setDragStartLocation}
+                            onDragEnd={this.endDrag}
+                        />
+                    }
+                    {this.props.children}
                     {this.onOpenFin ? (this.state.standalone ? 'Close Me To Restore' : 'Drag Me!') : 'Launch Me On OpenFin!'}
                 </div>
             )
@@ -68,10 +77,10 @@ export default class Tearout extends React.Component<{}, ITearoutState> {
             name: 'child-tearout',
             url: '/tearout'
         }, () => {
-            newChildWin.addEventListener('closed', () => {
-                this.setState({ dragged: false }, () => this.createChildWin());
-            })
             this.childWin = newChildWin;
+            newChildWin.addEventListener('closed', () => {
+                this.setState({ draggedOut: false }, () => this.createChildWin());
+            })
         })
     }
 
@@ -87,7 +96,7 @@ export default class Tearout extends React.Component<{}, ITearoutState> {
 
             if (distance > this.minDragDistance) {
                 this.setState({
-                    dragged: true,
+                    draggedOut: true,
                     xEnd: e.screenX,
                     yEnd: e.screenY
                 }, () => {
