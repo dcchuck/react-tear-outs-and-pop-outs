@@ -80,20 +80,22 @@ export default class Tearout extends React.Component<{}, ITearoutState> {
     }
 
     private endDrag(e: any) {
-        const distance = Math.sqrt(
-            Math.pow(e.screenX - this.state.xStart, 2) + Math.pow(e.screenY - this.state.yStart, 2)
-        )
+        if (!this.state.standalone) {
+            const distance = Math.sqrt(
+                Math.pow(e.screenX - this.state.xStart, 2) + Math.pow(e.screenY - this.state.yStart, 2)
+            )
 
-        if (distance > this.minDragDistance) {
-            this.setState({
-                dragged: true,
-                xEnd: e.screenX,
-                yEnd: e.screenY
-            }, () => {
-                if (this.onOpenFin) {
-                    this.childWin.showAt(this.state.xEnd, this.state.yEnd, false)
-                }
-            })
+            if (distance > this.minDragDistance) {
+                this.setState({
+                    dragged: true,
+                    xEnd: e.screenX,
+                    yEnd: e.screenY
+                }, () => {
+                    if (this.onOpenFin) {
+                        this.childWin.showAt(this.state.xEnd, this.state.yEnd, false)
+                    }
+                })
+            }
         }
     }
 }
