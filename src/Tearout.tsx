@@ -12,6 +12,7 @@ interface ITearoutState {
 
 interface ITearoutProps {
     minDragDistance?: number;
+    draggableElement: (props: any) => JSX.Element;
 }
 
 export default class Tearout extends React.Component<ITearoutProps, ITearoutState> {
@@ -41,6 +42,12 @@ export default class Tearout extends React.Component<ITearoutProps, ITearoutStat
     }
 
     public render() {
+        const draggableProps = {
+            draggable: true,
+            onDragEnd: this.endDrag,
+            onDragStart: this.setDragStartLocation
+        }
+
         if (this.state.draggedOut) {
             return null
         } else {
@@ -49,12 +56,7 @@ export default class Tearout extends React.Component<ITearoutProps, ITearoutStat
                     {this.state.standalone ?
                         null
                         :
-                        <div
-                            className="draggable-region"
-                            draggable={true}
-                            onDragStart={this.setDragStartLocation}
-                            onDragEnd={this.endDrag}
-                        />
+                        <this.props.draggableElement {...draggableProps} />
                     }
                     {this.props.children}
                     {this.onOpenFin ? (this.state.standalone ? 'Close Me To Restore' : 'Drag Me!') : 'Launch Me On OpenFin!'}
@@ -89,7 +91,7 @@ export default class Tearout extends React.Component<ITearoutProps, ITearoutStat
     }
 
     private endDrag(e: any) {
-        if (!this.state.standalone) {
+        if (!this.state.standalone && this.onOpenFin) {
             const distance = Math.sqrt(
                 Math.pow(e.screenX - this.state.xStart, 2) + Math.pow(e.screenY - this.state.yStart, 2)
             )

@@ -11,10 +11,18 @@ function TearoutChild() {
     )
 }
 
+function DraggableElement(props: any) {
+    return (
+        <div
+            className="draggable-region" {...props}
+        />
+    )
+}
+
 function ContainedTearout() {
     return (
         <div className="flex-container">
-            <Tearout>
+            <Tearout draggableElement={DraggableElement}>
                 <TearoutChild />
             </Tearout>
         </div>
@@ -24,7 +32,7 @@ function ContainedTearout() {
 function Home() {
     return (
         <div className="flex-container">
-            <Tearout minDragDistance={200} />
+            <Tearout minDragDistance={200} draggableElement={DraggableElement} />
             <div className="elements">2</div>
             <div className="elements">3</div>
         </div>

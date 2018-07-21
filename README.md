@@ -11,6 +11,15 @@ openfin -l -u http://localhost:3000
 
 This project is a work in progress.
 
+## Tearout
+
+### Props
+
+* draggableElement - A JSX element, the element will be made draggable. Renders before other children.
+* minDragDistance *optional: default 200* - minimum distance a user needs to drag the draggable Element before it triggers a pop out on drag end
+
+# Create React App README Below
+
 Below you will find some information on how to perform common tasks.<br>
 You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
 
