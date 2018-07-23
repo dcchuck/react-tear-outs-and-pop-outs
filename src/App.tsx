@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Route } from 'react-router-dom';
 import './App.css';
 import Tearout from './Tearout';
+import TearoutChildWithState from './TearoutChildWithState';
 
 function TearoutChild() {
     return (
@@ -33,7 +34,7 @@ function Home() {
     return (
         <div className="flex-container">
             <Tearout minDragDistance={200} draggableElement={DraggableElement} />
-            <div className="elements">2</div>
+            <TearoutChildWithState />
             <div className="elements">3</div>
         </div>
     )
