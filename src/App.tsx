@@ -20,6 +20,8 @@ function DraggableElement(props: any) {
     )
 }
 
+// TODO: create one element from the Tearout & TearoutChild
+
 function ContainedTearout() {
     return (
         <div className="flex-container">
@@ -30,11 +32,25 @@ function ContainedTearout() {
     )
 }
 
+function ContainedTearoutState() {
+    return (
+        <div className="flex-container">
+            <TearoutChildWithState draggableElement={DraggableElement}>
+                <TearoutChild />
+            </TearoutChildWithState>
+        </div>
+    )
+}
+
 function Home() {
     return (
         <div className="flex-container">
-            <Tearout minDragDistance={200} draggableElement={DraggableElement} />
-            <TearoutChildWithState />
+            <Tearout minDragDistance={200} draggableElement={DraggableElement}>
+                <TearoutChild />
+            </Tearout>
+            <TearoutChildWithState draggableElement={DraggableElement}>
+                <TearoutChild />
+            </TearoutChildWithState>
             <div className="elements">3</div>
         </div>
     )
@@ -46,6 +62,7 @@ class App extends React.Component {
             <div>
                 <Route exact={true} path='/' component={Home} />
                 <Route exact={true} path='/tearout' component={ContainedTearout} />
+                <Route exact={true} path='/tearout-state' component={ContainedTearoutState} />
             </div>
         );
     }

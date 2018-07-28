@@ -59,7 +59,6 @@ export default class Tearout extends React.Component<ITearoutProps, ITearoutStat
                         <this.props.draggableElement {...draggableProps} />
                     }
                     {this.props.children}
-                    {this.onOpenFin ? (this.state.standalone ? 'Close Me To Restore' : 'Drag Me!') : 'Launch Me On OpenFin!'}
                 </div>
             )
         }
