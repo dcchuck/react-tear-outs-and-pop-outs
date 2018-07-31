@@ -39,9 +39,6 @@ export default class TearoutChildWithState extends React.Component<ITearoutProps
         this.setDragStartLocation = this.setDragStartLocation.bind(this);
         this.endDrag = this.endDrag.bind(this);
         this.createChildWin = this.createChildWin.bind(this);
-        if (this.onOpenFin) {
-            this.createChildWin();
-        }
         this.myBroadcastChannel = new BroadcastChannel('child-tearout-state');
         this.myBroadcastChannel.onmessage = (m) => this.setState({ value: m.data.toString() })
         this.handleChange = this.handleChange.bind(this);
@@ -57,13 +54,6 @@ export default class TearoutChildWithState extends React.Component<ITearoutProps
         if (this.state.draggedOut) {
             return (
                 null
-                // <div className="elements" >
-                //     <div>
-                //         <input onChange={this.handleChange} value={this.state.value} />
-                //     </div>
-                //     {this.state.value}
-                //     {this.props.children}
-                // </div>
             )
         } else {
             return (
@@ -86,8 +76,18 @@ export default class TearoutChildWithState extends React.Component<ITearoutProps
     public componentDidMount() {
         if (this.onOpenFin) {
             const mainAppWindowName = fin.desktop.Application.getCurrent().getWindow().name;
-            const thisWindowName = fin.desktop.Window.getCurrent().name;
-            this.setState({ standalone: !(mainAppWindowName === thisWindowName) });
+            const thisWindow = fin.desktop.Window.getCurrent();
+            const thisWindowName = thisWindow.name;
+            const standalone = !(mainAppWindowName === thisWindowName);
+            if (!standalone) {
+                this.createChildWin();
+            } else {
+                thisWindow.addEventListener('close-requested', () => {
+                    this.myBroadcastChannel.postMessage(this.state.value);
+                    thisWindow.close(true);
+                })
+            }
+            this.setState({ standalone });
         }
     }
 
@@ -96,6 +96,8 @@ export default class TearoutChildWithState extends React.Component<ITearoutProps
     }
 
     private createChildWin() {
+        // tslint:disable-next-line:no-console
+        console.log('Child win called')
         const newChildWin = new fin.desktop.Window({
             autoShow: false,
             name: 'child-tearout-state',
@@ -105,6 +107,9 @@ export default class TearoutChildWithState extends React.Component<ITearoutProps
             newChildWin.addEventListener('closed', () => {
                 this.setState({ draggedOut: false }, () => this.createChildWin());
             })
+        }, (e: any) => {
+            // tslint:disable-next-line:no-console
+            console.log(`Error creating child window: ${e}`);
         })
     }
 
