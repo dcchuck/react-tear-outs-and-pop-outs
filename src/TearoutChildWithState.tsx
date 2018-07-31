@@ -14,6 +14,7 @@ interface ITearoutState {
 interface ITearoutProps {
     minDragDistance?: number;
     draggableElement: (props: any) => JSX.Element;
+    childName: string;
 }
 
 export default class TearoutChildWithState extends React.Component<ITearoutProps, ITearoutState> {
@@ -39,7 +40,7 @@ export default class TearoutChildWithState extends React.Component<ITearoutProps
         this.setDragStartLocation = this.setDragStartLocation.bind(this);
         this.endDrag = this.endDrag.bind(this);
         this.createChildWin = this.createChildWin.bind(this);
-        this.myBroadcastChannel = new BroadcastChannel('child-tearout-state');
+        this.myBroadcastChannel = new BroadcastChannel(this.props.childName);
         this.myBroadcastChannel.onmessage = (m) => this.setState({ value: m.data.toString() })
         this.handleChange = this.handleChange.bind(this);
     }
@@ -100,7 +101,7 @@ export default class TearoutChildWithState extends React.Component<ITearoutProps
         console.log('Child win called')
         const newChildWin = new fin.desktop.Window({
             autoShow: false,
-            name: 'child-tearout-state',
+            name: this.props.childName,
             url: '/tearout-state'
         }, () => {
             this.childWin = newChildWin;

@@ -17,6 +17,7 @@ This project is a work in progress.
 
 * draggableElement - A JSX element, the element will be made draggable. Renders before other children.
 * minDragDistance *optional: default 200* - minimum distance a user needs to drag the draggable Element before it triggers a pop out on drag end
+* childName - Name the child window. This also defines the broadcast channel for state passing. These are unique to a parent-child tearout relationship. For example, if I want to create a tearable component, I would give it a childName (let's call it `readme-child`) and then create a route for the same composed element, also with the childName `readme-child`. If I wanted to create another tearable element, I would use a new childName for both the parent and the child.
 
 # Create React App README Below
 

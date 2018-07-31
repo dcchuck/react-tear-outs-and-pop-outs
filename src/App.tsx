@@ -25,7 +25,7 @@ function DraggableElement(props: any) {
 function ContainedTearout() {
     return (
         <div className="flex-container">
-            <Tearout draggableElement={DraggableElement}>
+            <Tearout draggableElement={DraggableElement} childName='Unique-To-Child-Parent-Pair'>
                 <TearoutChild />
             </Tearout>
         </div>
@@ -35,7 +35,7 @@ function ContainedTearout() {
 function ContainedTearoutState() {
     return (
         <div className="flex-container">
-            <TearoutChildWithState draggableElement={DraggableElement}>
+            <TearoutChildWithState draggableElement={DraggableElement} childName='Can-Not-Repeat-In-Other-Pair'>
                 <TearoutChild />
             </TearoutChildWithState>
         </div>
@@ -45,10 +45,10 @@ function ContainedTearoutState() {
 function Home() {
     return (
         <div className="flex-container">
-            <Tearout minDragDistance={200} draggableElement={DraggableElement}>
+            <Tearout minDragDistance={200} draggableElement={DraggableElement} childName='Unique-To-Child-Parent-Pair'>
                 <TearoutChild />
             </Tearout>
-            <TearoutChildWithState draggableElement={DraggableElement}>
+            <TearoutChildWithState draggableElement={DraggableElement} childName='Can-Not-Repeat-In-Other-Pair'>
                 <TearoutChild />
             </TearoutChildWithState>
             <div className="elements">3</div>

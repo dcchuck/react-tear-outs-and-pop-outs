@@ -13,6 +13,7 @@ interface ITearoutState {
 interface ITearoutProps {
     minDragDistance?: number;
     draggableElement: (props: any) => JSX.Element;
+    childName: string;
 }
 
 export default class Tearout extends React.Component<ITearoutProps, ITearoutState> {
@@ -75,7 +76,7 @@ export default class Tearout extends React.Component<ITearoutProps, ITearoutStat
     private createChildWin() {
         const newChildWin = new fin.desktop.Window({
             autoShow: false,
-            name: 'child-tearout',
+            name: this.props.childName,
             url: '/tearout'
         }, () => {
             this.childWin = newChildWin;
